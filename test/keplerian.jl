@@ -2,9 +2,7 @@ using BenchmarkTools
 using LinearAlgebra
 using Measurements
 using Orbits:
-    KeplerianOrbit,
     flip,
-    relative_position,
     compute_aor,
     compute_rho,
     compute_b,
@@ -12,8 +10,6 @@ using Orbits:
     _planet_position,
     stringify_units
 using Statistics
-using Unitful
-using UnitfulAstro
 
 # Constants
 const G_nom = 2942.2062175044193 # Rsun^3/Msun/d^2

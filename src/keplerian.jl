@@ -293,13 +293,17 @@ end
 # TODO: consider moving this to a separate orbital calculations package in the future
 function _position(orbit, separation, t)
     sin_ν, cos_ν = compute_true_anomaly(orbit, t)
+    return _position(orbit, separation, sin_ν, cos_ν)
+end
+
+function _position(orbit, separation, true_anom_sin, true_anom_cos)
     if isnothing(orbit.ecc) || iszero(orbit.ecc)
         r = separation
     else
-        r = separation * (1 - orbit.ecc^2) / (1 + orbit.ecc * cos_ν)
+        r = separation * (1 - orbit.ecc^2) / (1 + orbit.ecc * true_anom_cos)
     end
     # Transform from orbital plane to equatorial plane
-    X = SA[r*cos_ν, r*sin_ν, zero(r)]
+    X = SA[r*true_anom_cos, r*true_anom_sin, zero(r)]
     R = RotZXZ(orbit.Omega, -orbit.incl, orbit.omega)
     return R * X
 end

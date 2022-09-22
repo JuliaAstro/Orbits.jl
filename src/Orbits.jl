@@ -23,5 +23,6 @@ relative_position(::AbstractOrbit, t)
 
 include("simple.jl")
 include("keplerian.jl")
+include("plots.jl")
 
 end # module

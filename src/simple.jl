@@ -1,11 +1,11 @@
 @concrete struct SimpleOrbit <: AbstractOrbit
-    period
-    t0
-    b
-    duration
-    speed
-    half_period
-    ref_time
+    period::Any
+    t0::Any
+    b::Any
+    duration::Any
+    speed::Any
+    half_period::Any
+    ref_time::Any
 end
 
 """
@@ -19,18 +19,19 @@ Circular orbit parameterized by the basic observables of a transiting system.
 * `t0` - The midpoint time of the reference transit, similar units as `period`
 * `b` - The impact parameter of the orbit, unitless
 """
-function SimpleOrbit(;period, duration, t0=zero(period), b=0)
+function SimpleOrbit(; period, duration, t0 = zero(period), b = 0)
     half_period = 0.5 * period
     duration > half_period && error("duration cannot be longer than half the period")
     speed = 2.0 * sqrt(1.0 - b^2) / duration
-    ref_time =  t0 - half_period
+    ref_time = t0 - half_period
     SimpleOrbit(period, t0, b, duration, speed, half_period, ref_time)
 end
 
 period(orbit::SimpleOrbit) = orbit.period
 duration(orbit::SimpleOrbit) = orbit.duration
 
-relative_time(orbit::SimpleOrbit, t) = mod(t - orbit.ref_time, period(orbit)) - orbit.half_period
+relative_time(orbit::SimpleOrbit, t) =
+    mod(t - orbit.ref_time, period(orbit)) - orbit.half_period
 
 function relative_position(orbit::SimpleOrbit, t)
     Δt = relative_time(orbit, t)
@@ -57,7 +58,15 @@ function flip(orbit::SimpleOrbit, ror)
     b = orbit.b / ror
     speed = orbit.speed / ror
     ref_time = orbit.t0
-    return SimpleOrbit(period(orbit), t0, b, duration(orbit), speed, orbit.half_period, ref_time)
+    return SimpleOrbit(
+        period(orbit),
+        t0,
+        b,
+        duration(orbit),
+        speed,
+        orbit.half_period,
+        ref_time,
+    )
 end
 
 function Base.show(io::IO, orbit::SimpleOrbit)
@@ -73,10 +82,5 @@ function Base.show(io::IO, ::MIME"text/plain", orbit::SimpleOrbit)
     P = period(orbit)
     b = orbit.b
     t0 = orbit.t0
-    print(io,
-        "SimpleOrbit\n period: ", P,
-        "\n duration: ", T,
-        "\n t0: ", t0,
-        "\n b: ", b
-    )
+    print(io, "SimpleOrbit\n period: ", P, "\n duration: ", T, "\n t0: ", t0, "\n b: ", b)
 end

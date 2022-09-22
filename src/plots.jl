@@ -1,6 +1,6 @@
 using RecipesBase
 
-@recipe function f(orbit::AbstractOrbit; N = 90, distance = nothing)
+@recipe function f(orbit::KeplerianOrbit; N = 90, distance = nothing)
     # We almost always want to see spatial coordinates with equal step sizes
     aspect_ratio --> 1
     # And we almost always want to reverse the RA coordinate to match how we
@@ -14,13 +14,12 @@ using RecipesBase
     νs = range(-π, π; length = N)
     pos = @. _position(orbit, -orbit.aR_star, sin(νs), cos(νs))
 
-    xs = map(p -> p[1] * oneunit(orbit.R_star), pos)
-    ys = map(p -> p[2] * oneunit(orbit.R_star), pos)
+    xs = map(p -> p[1], pos)
+    ys = map(p -> p[2], pos)
 
     if !isnothing(distance)
-        d_pc = ustrip(u"pc", distance)
-        xs = @. ustrip(u"AU", xs) / d_pc * u"arcsecond"
-        ys = @. ustrip(u"AU", ys) / d_pc * u"arcsecond"
+        xs = @. xs / distance |> u"arcsecond"
+        ys = @. ys / distance |> u"arcsecond"
     end
 
     return xs, ys

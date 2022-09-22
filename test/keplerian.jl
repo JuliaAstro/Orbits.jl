@@ -622,5 +622,5 @@ end
         omega = (72.6 ± 0.8)u"°",
     )
     pos = relative_position(orbit, orbit.tp)
-    @test pos ≈ [-7.6 ± 0.18, -2.79 ± 0.18, 10.05 ± 0.19] atol = 1e-2
+    @test pos ≈ [-7.6 ± 0.18, -2.79 ± 0.18, 10.05 ± 0.19]u"AU" atol = 1e-2
 end

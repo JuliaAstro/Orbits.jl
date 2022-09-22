@@ -9,4 +9,6 @@
 SimpleOrbit
 KeplerianOrbit
 relative_position
+Orbits.separation
+Orbits.position_angle
 ```

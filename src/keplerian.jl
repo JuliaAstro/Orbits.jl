@@ -305,7 +305,7 @@ function _position(orbit, separation, true_anom_sin, true_anom_cos)
     # Transform from orbital plane to equatorial plane
     X = SA[r*true_anom_cos, r*true_anom_sin, zero(r)]
     R = RotZXZ(orbit.Omega, -orbit.incl, orbit.omega)
-    return R * X
+    return R * X * oneunit(orbit.R_star)
 end
 _star_position(orb, R_star, t) = _position.(orb, orb.a_star / R_star, t)
 _planet_position(orb, R_star, t) = _position.(orb, orb.a_planet / R_star, t)
@@ -320,6 +320,26 @@ function compute_true_anomaly(orbit::KeplerianOrbit, t)
         E = kepler_solver(uconvert(NoUnits, M), orbit.ecc)
         return sincos(trueanom(E, orbit.ecc))
     end
+end
+
+"""
+    position_angle(::KeplerianOrbit, t)
+
+Calculates the position angle (in degrees) of the companion at time `t`
+"""
+function position_angle(orbit::KeplerianOrbit, t)
+    x, y, _ = relative_position(orbit, t)
+    return atand(x, y)
+end
+
+"""
+    separation(::KeplerianOrbit, t)
+
+Calculates the separation of the companion at time `t`
+"""
+function separation(orbit::KeplerianOrbit, t)
+    x, y, _ = relative_position(orbit, t)
+    return hypot(x, y)
 end
 
 function flip(orbit::KeplerianOrbit, R_planet)

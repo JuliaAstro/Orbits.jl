@@ -1,5 +1,4 @@
-using Transits
-using Transits.Orbits: rotate_vector, compute_true_anomaly
+using Orbits: rotate_vector, compute_true_anomaly
 using BenchmarkTools
 
 orbit = KeplerianOrbit((

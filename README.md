@@ -10,17 +10,12 @@
 
 Flexible and fast astronomical orbits (originally a submodule of [Transits.jl](https://github.com/JuliaAstro/Transits.jl)).
 
-The goals of this package are, in this order
-
+The goals of this package are, in this order:
 * have a simple interface with high *composability*
 * be flexible with respect to numeric types and application
 * be fully compatible with [ChainRules.jl](https://github.com/juliadiff/ChainRules.jl) automatic differentiation (AD) system to leverage the derived analytical gradients
 * provide a codebase that is well-organized, instructive, and easy to extend
 * maintain high performance: at least as fast as similar tools
-
-## Contributing and Support
-
-If you would like to contribute, feel free to open a [pull request](https://github.com/JuliaAstro/Orbits.jl/pulls). If you want to discuss something before contributing, head over to [discussions](https://github.com/JuliaAstro/Orbits.jl/discussions) and join or open a new topic.
 
 ## Installation
 
@@ -52,3 +47,7 @@ using Unitful
 orbit = SimpleOrbit(period=10u"d", duration=5u"hr")
 t = range(-6, 6, length=1000)u"hr"
 ```
+
+## Contributing and Support
+
+If you would like to contribute, feel free to open a [pull request](https://github.com/JuliaAstro/Orbits.jl/pulls). If you want to discuss something before contributing, head over to [discussions](https://github.com/JuliaAstro/Orbits.jl/discussions) and join or open a new topic.

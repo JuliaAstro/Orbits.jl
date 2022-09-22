@@ -1,39 +1,40 @@
 ```@meta
-CurrentModule = Transits
+CurrentModule = Orbits
 ```
 
-# Transits.jl
+# Orbits.jl
 
-[![GitHub](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/juliaastro/Transits.jl)
-[![Build Status](https://github.com/juliaastro/Transits.jl/workflows/CI/badge.svg)](https://github.com/juliaastro/Transits.jl/actions)
-[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/T/Transits.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
-[![Coverage](https://codecov.io/gh/juliaastro/Transits.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/juliaastro/Transits.jl)
+[![GitHub](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/juliaastro/Orbits.jl)
 
+[![Build Status](https://github.com/juliaastro/Orbits.jl/workflows/CI/badge.svg?branch=main)](https://github.com/juliaastro/Orbits.jl/actions)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/O/Orbits.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![Coverage](https://codecov.io/gh/juliaastro/Orbits.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/juliaastro/Orbits.jl)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4544094.svg)](https://doi.org/10.5281/zenodo.4544094)
 
-Transits.jl provides flexible and powerful occultation curves with limb darkening. The goals of this package are, in this order
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.github.io/Orbits.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.github.io/Orbits.jl/dev)
+
+Flexible and fast astronomical orbits (originally a submodule of [Transits.jl](https://github.com/JuliaAstro/Transits.jl)).
+The goals of this package are, in this order:
 * have a simple interface with high *composability*
 * be flexible with respect to numeric types and application
 * be fully compatible with [ChainRules.jl](https://github.com/juliadiff/ChainRules.jl) automatic differentiation (AD) system to leverage the derived analytical gradients
 * provide a codebase that is well-organized, instructive, and easy to extend
 * maintain high performance: at least as fast as similar tools
 
-In particular, [`PolynomialLimbDark`](@ref) implements the "starry" limb darkening method, which solves the flux integral analytically. This provides floating-point errors and runtimes that are best in class.
-
 ## Installation
 
 To install use [Pkg](https://julialang.github.io/Pkg.jl/v1/managing-packages/). From the REPL, press `]` to enter Pkg-mode
 
 ```julia
-pkg> add Transits
+pkg> add Orbits
 ```
 If you want to use the most up-to-date version of the code, check it out from `main`
 
 ```julia
-pkg> add Transits#main
+pkg> add Orbits#main
 ```
 
-## Citations
+## Contributing and Support
 
-If you use Transits.jl or a derivative of it in your work please consider citing it at the [Zenodo DOI](https://doi.org/10.5281/zenodo.4544094). If you use `PolynomialLimbDark` or `QuadLimbDark` please also cite [Agol et al. (2020)](https://ui.adsabs.harvard.edu/abs/2020AJ....159..123A/abstract) and [Luger et al. (2019)](https://ui.adsabs.harvard.edu/abs/2019AJ....157...64L/abstract). If you use `Kipping13` please cite [Kipping (2013)](https://ui.adsabs.harvard.edu/abs/2013MNRAS.435.2152K/exportcitation). BibTeX for all those citations can be found in [`CITATIONS.bib`](https://github.com/JuliaAstro/Transits.jl/blob/main/CITATIONS.bib).
+If you would like to contribute, feel free to open a [pull request](https://github.com/JuliaAstro/Orbits.jl/pulls). If you want to discuss something before contributing, head over to [discussions](https://github.com/JuliaAstro/Orbits.jl/discussions) and join or open a new topic.

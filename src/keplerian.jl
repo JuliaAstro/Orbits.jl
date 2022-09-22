@@ -303,9 +303,9 @@ function _position(orbit, separation, true_anom_sin, true_anom_cos)
         r = separation * (1 - orbit.ecc^2) / (1 + orbit.ecc * true_anom_cos)
     end
     # Transform from orbital plane to equatorial plane
-    X = SA[r*true_anom_cos, r*true_anom_sin, zero(r)]
+    X = SA[r*true_anom_cos, r*true_anom_sin, zero(r)] * oneunit(orbit.R_star)
     R = RotZXZ(orbit.Omega, -orbit.incl, orbit.omega)
-    return R * X * oneunit(orbit.R_star)
+    return R * X
 end
 _star_position(orb, R_star, t) = _position.(orb, orb.a_star / R_star, t)
 _planet_position(orb, R_star, t) = _position.(orb, orb.a_planet / R_star, t)

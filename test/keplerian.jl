@@ -10,7 +10,6 @@ using Orbits:
     _star_position,
     _planet_position,
     stringify_units
-using PythonCall
 using Statistics
 using Unitful
 using UnitfulAstro
@@ -20,51 +19,81 @@ const G_nom = 2942.2062175044193 # Rsun^3/Msun/d^2
 const MsunRsun_to_gcc = ustrip(u"g/cm^3", 1.0u"Msun/Rsun^3")
 
 # Setup python env
-_rsky = pyimport("batman._rsky")
+import Pkg
+ENV["PYTHON"] = ""
+Pkg.build("PyCall")
+using PyCall, Conda
+Conda.add(["batman-package"]; channel = "conda-forge")
 
-function generate_sky_coords()
+py"""
+import numpy as np
+from batman import _rsky
 
-    t = range(-100, 100, length = 1000)
+def sky_coords():
+    t = np.linspace(-100, 100, 1_000)
 
-    t0s = range(-5.0, 5.0, length = 2)
-    periods = exp.(range(log(5.0), log(50.0), length = 3))
-    as = range(50.0, 100.0, length = 2)
-    eccs = range(0.0, 0.9, length = 5)
-    omegas = range(-π, π, length = 3)
-    incls = acos.(range(0, 0.75, length = 4))
-
-    iter = Iterators.product(t0s, periods, as, eccs, omegas, incls)
-
-    r_batman = mapreduce(params -> _rsky._rsky(t, params..., 1, 1), hcat, iter)
-
-    for (i, params) in enumerate(iter)
-        r_batman[:, i] = _rsky._rsky(t, params..., 1, 1)
-    end
-
-    m = r_batman .< 100
-
-    return Dict(
-        "m_sum" => count(m), # Save native Int format
-        "r_batman" => r_batman,
-        "m" => m,
-        "t" => t,
-        "t0" => t0,
-        "period" => period,
-        "a" => a,
-        "e" => ecc,
-        "omega" => omega,
-        "incl" => incl,
+    t0, period, a, e, omega, incl = (
+        x.flatten()
+        for x in np.meshgrid(
+            np.linspace(-5.0, 5.0, 2),
+            np.exp(np.linspace(np.log(5.0), np.log(50.0), 3)),
+            np.linspace(50.0, 100.0, 2),
+            np.linspace(0.0, 0.9, 5),
+            np.linspace(-np.pi, np.pi, 3),
+            np.arccos(np.linspace(0, 1, 5)[:-1]),
+        )
     )
-end
 
-function generate_small_star(period, t0, aR_star, incl, ecc, omega)
-    t = range(0, period, length = 500)
-    r_batman = _rsky._rsky(t, t0, period, aR_star, incl, ecc, omega, 1, 1)
-    m = r_batman .< 100
-    return Dict("t" => t, "r_batman" => r_batman, "m" => m)
-end
+    r_batman = np.empty((len(t), len(t0)))
 
-compute_r(orbit, t) = norm(relative_position(orbit, t))
+    for i in range(len(t0)):
+        r_batman[:, i] = _rsky._rsky(
+            t, t0[i], period[i], a[i], incl[i], e[i], omega[i], 1, 1
+        )
+
+    m = r_batman < 100.0
+
+    return {
+        "m_sum" : m.sum().item(), # Save native Int format
+        "r_batman" : r_batman,
+        "m" : m,
+        "t" : t,
+        "t0" : t0,
+        "period" : period,
+        "a" : a,
+        "e" : e,
+        "omega" : omega,
+        "incl" : incl,
+    }
+
+
+def small_star(period, t0, aR_star, incl, ecc, omega):
+    t = np.linspace(0, period, 500)
+    r_batman = _rsky._rsky(
+        t,
+        t0,
+        period,
+        aR_star,
+        incl,
+        ecc,
+        omega,
+        1,
+        1
+    )
+
+    m = r_batman < 100.0
+
+    return {
+        "t": t,
+        "r_batman": r_batman,
+        "m": m,
+    }
+"""
+
+function compute_r(orbit, t)
+    pos = relative_position(orbit, t)
+    return hypot(pos[1], pos[2])
+end
 
 # Convert vector of vectors -> matrix
 as_matrix(pos) = reinterpret(reshape, Float64, pos) |> permutedims
@@ -74,19 +103,20 @@ as_matrix(pos) = reinterpret(reshape, Float64, pos) |> permutedims
 
 @testset "KeplerianOrbit: sky coords" begin
     # Comparison coords from `batman`
-    sky_coords = generate_sky_coords()
+    sky_coords = py"sky_coords"()
 
     # Create comparison orbits from Orbits.jl
-    orbits =
-        KeplerianOrbit.(
-            aR_star = sky_coords["a"],
-            P = sky_coords["period"],
-            incl = sky_coords["incl"],
-            t0 = sky_coords["t0"],
-            ecc = sky_coords["e"],
+    orbits = map(1:length(sky_coords["t0"])) do i
+        return KeplerianOrbit(;
+            aR_star = sky_coords["a"][i],
+            P = sky_coords["period"][i],
+            incl = sky_coords["incl"][i],
+            t0 = sky_coords["t0"][i],
+            ecc = sky_coords["e"][i],
             Omega = 0.0,
-            omega = sky_coords["omega"],
+            omega = sky_coords["omega"][i],
         )
+    end
 
     # Compute coords
     t = sky_coords["t"]
@@ -108,7 +138,7 @@ as_matrix(pos) = reinterpret(reshape, Float64, pos) |> permutedims
     r_Orbits = r[m]
     r_batman = sky_coords["r_batman"][m]
 
-    @test sum(m) > 0
+    @test count(m) > 0
     @test allclose(r_Orbits, r_batman, atol = 2e-5)
     @test all(>(0), z[m])
     no_transit = @. (z[!(m)] < 0) | (r[!(m)] > 2)
@@ -367,7 +397,7 @@ end
     )
 
     # Comparison coords from `batman`
-    small_star = generate_small_star(
+    small_star = py"small_star"(
         orbit.period,
         orbit.t0,
         orbit.aR_star,
@@ -381,7 +411,7 @@ end
     r_batman = small_star["r_batman"]
     m = small_star["m"]
     r = compute_r.(orbit, t)
-    @test sum(m) > 0
+    @test count(m) > 0
     @test allclose(r_batman[m], r[m], atol = 2e-5)
 end
 

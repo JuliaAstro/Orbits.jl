@@ -1,6 +1,3 @@
-using ChainRulesCore
-using ChainRulesTestUtils
-using QuadGK
 using StableRNGs
 using Orbits
 using Test

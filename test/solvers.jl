@@ -1,4 +1,4 @@
-using Transits.Orbits: trueanom, kepler_solver
+using Orbits: trueanom, kepler_solver
 
 # Compute sin_ν, cos_ν without using arctan function directly
 function compute_sincos_ν_no_atan(E, ecc; tol=1e-10)

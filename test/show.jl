@@ -1,5 +1,5 @@
 @testset "SimpleOrbit" begin
-    orbit = SimpleOrbit(duration=1, period=3)
+    orbit = SimpleOrbit(duration = 1, period = 3)
 
     @test sprint(show, orbit) == "SimpleOrbit(P=3, T=1, t0=0, b=0)"
 

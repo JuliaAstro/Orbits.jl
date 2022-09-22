@@ -1,7 +1,7 @@
 using Orbits: trueanom, kepler_solver
 
 # Compute sin_ν, cos_ν without using arctan function directly
-function compute_sincos_ν_no_atan(E, ecc; tol=1e-10)
+function compute_sincos_ν_no_atan(E, ecc; tol = 1e-10)
     sin_E, cos_E = sincos(E)
     denom = 1.0 + cos_E
 
@@ -19,11 +19,11 @@ function compute_sincos_ν_no_atan(E, ecc; tol=1e-10)
     denom = 1.0 / (1.0 + x²)
     sin_ν = 2.0 * x * denom
     cos_ν = (1.0 - x²) * denom
-    return sin_ν * m , cos_ν * m - 1.0 * m_inv
+    return sin_ν * m, cos_ν * m - 1.0 * m_inv
 end
 
 function compute_E_solver(E, ecc)
-    M =  E - ecc * sin(E)
+    M = E - ecc * sin(E)
     return kepler_solver(M, ecc) # <- E
 end
 
@@ -44,9 +44,7 @@ end
 compute_summary(Es, eccs) = eachrow(mapreduce(_compute_vals, hcat, Es, eccs))
 
 function test_vals(summary)
-    (E_solver,     E_user,
-     sin_ν_solver, sin_ν_user,
-     cos_ν_solver, cos_ν_user) = summary
+    (E_solver, E_user, sin_ν_solver, sin_ν_user, cos_ν_solver, cos_ν_user) = summary
 
     @test all(isfinite.(sin_ν_solver))
     @test all(isfinite.(cos_ν_solver))
@@ -66,14 +64,14 @@ end
 end
 
 @testset "kepler_solver: Let them eat π" begin
-    eccs = range(0.0, 1.0; length=100)[begin:end-1]
+    eccs = range(0.0, 1.0; length = 100)[begin:end-1]
     Es = fill(π, length(eccs))
     test_vals(compute_summary(Es, eccs))
 end
 
 @testset "kepler_solver: solver" begin
-    ecc_range = range(0, 1; length=500)[begin:end-1]
-    E_range = range(-300, 300; length=1_001)
+    ecc_range = range(0, 1; length = 500)[begin:end-1]
+    E_range = range(-300, 300; length = 1_001)
     E_ecc_pairs = Iterators.product(E_range, ecc_range)
     Es = reshape(map(x -> x[1], E_ecc_pairs), :, 1)
     eccs = reshape(map(x -> x[2], E_ecc_pairs), :, 1)

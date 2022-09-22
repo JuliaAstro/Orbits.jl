@@ -76,18 +76,17 @@ as_matrix(pos) = reinterpret(reshape, Float64, pos) |> permutedims
     # Comparison coords from `batman`
     sky_coords = generate_sky_coords()
 
-    # Create comparison orbits from Transits.jl
-    orbits = [
-        KeplerianOrbit(
-            aR_star = sky_coords["a"][i],
-            P = sky_coords["period"][i],
-            incl = sky_coords["incl"][i],
-            t0 = sky_coords["t0"][i],
-            ecc = sky_coords["e"][i],
+    # Create comparison orbits from Orbits.jl
+    orbits =
+        KeplerianOrbit.(
+            aR_star = sky_coords["a"],
+            P = sky_coords["period"],
+            incl = sky_coords["incl"],
+            t0 = sky_coords["t0"],
+            ecc = sky_coords["e"],
             Omega = 0.0,
-            omega = sky_coords["omega"][i],
-        ) for i = 1:length(sky_coords["t0"])
-    ]
+            omega = sky_coords["omega"],
+        )
 
     # Compute coords
     t = sky_coords["t"]
@@ -106,11 +105,11 @@ as_matrix(pos) = reinterpret(reshape, Float64, pos) |> permutedims
     # Compare
     m = sky_coords["m"]
     r = hypot.(x, y)
-    r_Transits = r[m]
+    r_Orbits = r[m]
     r_batman = sky_coords["r_batman"][m]
 
     @test sum(m) > 0
-    @test allclose(r_Transits, r_batman, atol = 2e-5)
+    @test allclose(r_Orbits, r_batman, atol = 2e-5)
     @test all(>(0), z[m])
     no_transit = @. (z[!(m)] < 0) | (r[!(m)] > 2)
     @test all(no_transit)
@@ -356,7 +355,7 @@ end
 end
 
 @testset "KeplerianOrbit: small star" begin
-    # Sample model from `Transits.jl`
+    # Sample model from `Orbits.jl`
     orbit = KeplerianOrbit(
         R_star = 0.189,
         M_star = 0.151,
@@ -387,7 +386,7 @@ end
 end
 
 @testset "KeplerianOrbit: impact" begin
-    # Sample model from `Transits.jl`
+    # Sample model from `Orbits.jl`
     orbit = KeplerianOrbit(
         R_star = 0.189,
         M_star = 0.151,

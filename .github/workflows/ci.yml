@@ -51,7 +51,7 @@ jobs:
       - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
       - run: julia -e 'using Pkg; Pkg.add("Aqua")'
-      - run: julia --project=@. -e 'using Aqua, Transits; Aqua.test_all(Transits, ambiguities=false)'
+      - run: julia --project=@. -e 'using Aqua, Orbits; Aqua.test_all(Orbits, ambiguities=false)'
   docs:
     name: Documentation
     runs-on: ubuntu-latest

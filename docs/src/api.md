@@ -23,7 +23,7 @@ compute(::AbstractLimbDark, ::Orbits.AbstractOrbit, t, r)
 Gradients and jacobians are integrated directly into [ChainRules.jl](https://github.com/juliadiff/ChainRules.jl) via `frule`s and `rrule`s. *For most users, this just means using AD libraries like [ForwardDiff.jl](https://github.com/juliadiff/ForwardDiff.jl) and [Zygote.jl](https://github.com/FluxML/Zygote.jl) is effortless and fast*.
 
 ```jldoctest grads
-using Transits
+using Orbits
 using Zygote
 
 lightcurve(X) = compute(PolynomialLimbDark(X[3:end]), X[1], X[2])

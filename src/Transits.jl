@@ -1,4 +1,4 @@
-module Transits
+module Orbits
 
 using ChainRulesCore
 using Reexport

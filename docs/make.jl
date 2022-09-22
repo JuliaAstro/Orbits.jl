@@ -1,27 +1,27 @@
-using Transits
+using Orbits
 using Documenter
 
 setup = quote
-    using Transits
+    using Orbits
 end
 
-DocMeta.setdocmeta!(Transits, :DocTestSetup, setup; recursive = true)
+DocMeta.setdocmeta!(Orbits, :DocTestSetup, setup; recursive = true)
 include("pages.jl")
 makedocs(;
-    modules=[Transits],
+    modules=[Orbits],
     authors="Miles Lucas <mdlucas@hawaii.edu> and contributors",
-    repo="https://github.com/juliaastro/Transits.jl/blob/{commit}{path}#L{line}",
-    sitename="Transits.jl",
+    repo="https://github.com/juliaastro/Orbits.jl/blob/{commit}{path}#L{line}",
+    sitename="Orbits.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://juliaastro.github.io/Transits.jl",
+        canonical="https://juliaastro.github.io/Orbits.jl",
         assets=String[],
     ),
     pages = pages
 )
 
 deploydocs(;
-    repo="github.com/JuliaAstro/Transits.jl",
+    repo="github.com/JuliaAstro/Orbits.jl",
     push_preview=true,
     devbranch="main"
 )

@@ -1,5 +1,6 @@
 using BenchmarkTools
 using LinearAlgebra
+using Measurements
 using Orbits:
     KeplerianOrbit,
     flip,
@@ -612,4 +613,18 @@ end
         ω = 0.0,
     )
     @test orbit_standard_2 === orbit_kwarg_alias_2
+end
+
+@testset "KeplerianOrbit: mean anomaly is unitful" begin
+    orbit = KeplerianOrbit(;
+        period = (40.57 ± 0.19)u"yr",
+        ecc = 0.42 ± 0.009,
+        Omega = (318.6 ± 0.6)u"°",
+        tp = (1972.12 ± 0.16)u"yr",
+        incl = (54.7 ± 0.6)u"°",
+        a = (0.154 ± 0.001) * 144.51u"AU",
+        omega = (72.6 ± 0.8)u"°",
+    )
+    pos = relative_position(orbit, orbit.tp)
+    @test pos ≈ [-7.6 ± 0.18, -2.79 ± 0.18, 10.05 ± 0.19] atol = 1e-2
 end

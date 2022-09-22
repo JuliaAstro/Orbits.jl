@@ -48,35 +48,35 @@ The following flowchart can be used to determine which parameters can define a `
 5. Either `t0` or `tp` must be given, but not both.
 """
 @concrete struct KeplerianOrbit <: AbstractOrbit
-    period::Any
-    t0::Any
-    tp::Any
-    t_ref::Any
-    duration::Any
-    a::Any
-    a_planet::Any
-    a_star::Any
-    R_planet::Any
-    R_star::Any
-    rho_planet::Any
-    rho_star::Any
-    r::Any
-    aR_star::Any
-    b::Any
-    ecc::Any
-    M0::Any
-    cos_incl::Any
-    sin_incl::Any
-    cos_omega::Any
-    sin_omega::Any
-    cos_Omega::Any
-    sin_Omega::Any
-    incl::Any
-    omega::Any
-    Omega::Any
-    n::Any
-    M_planet::Any
-    M_star::Any
+    period
+    t0
+    tp
+    t_ref
+    duration
+    a
+    a_planet
+    a_star
+    R_planet
+    R_star
+    rho_planet
+    rho_star
+    r
+    aR_star
+    b
+    ecc
+    M0
+    cos_incl
+    sin_incl
+    cos_omega
+    sin_omega
+    cos_Omega
+    sin_Omega
+    incl
+    omega
+    Omega
+    n
+    M_planet
+    M_star
 end
 
 function KeplerianOrbit(
@@ -313,7 +313,7 @@ function compute_true_anomaly(orbit::KeplerianOrbit, t)
     if isnothing(orbit.ecc) || iszero(orbit.ecc)
         return sincos(M)
     else
-        E = kepler_solver(M, orbit.ecc)
+        E = kepler_solver(uconvert(NoUnits, M), orbit.ecc)
         return sincos(trueanom(E, orbit.ecc))
     end
 end

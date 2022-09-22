@@ -6,7 +6,9 @@ setup = quote
 end
 
 DocMeta.setdocmeta!(Orbits, :DocTestSetup, setup; recursive = true)
+
 include("pages.jl")
+
 makedocs(;
     modules = [Orbits],
     authors = "Miles Lucas <mdlucas@hawaii.edu> and contributors",

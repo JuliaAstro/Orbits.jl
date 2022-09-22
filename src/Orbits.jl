@@ -4,7 +4,7 @@ using ConcreteStructs
 using StaticArrays
 using Printf
 
-export SimpleOrbit, KeplerianOrbit
+export SimpleOrbit, KeplerianOrbit, relative_position
 
 abstract type AbstractOrbit end
 

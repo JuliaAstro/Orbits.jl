@@ -1,11 +1,11 @@
 @concrete struct SimpleOrbit <: AbstractOrbit
-    period::Any
-    t0::Any
-    b::Any
-    duration::Any
-    speed::Any
-    half_period::Any
-    ref_time::Any
+    period
+    t0
+    b
+    duration
+    speed
+    half_period
+    ref_time
 end
 
 """

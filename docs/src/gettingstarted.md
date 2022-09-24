@@ -3,7 +3,7 @@
 
 ## Keplerian Orbits
 
-Let's dive straight into some of the features Orbits.jl offers. Keplerian orbits are the backbone of astronomical dynamics, and we provide a "kitchen-sink" style [`KeplerianOrbit`](@ref). This means it wall try and parse whichever keyword arguments you provide, with units, uncertainties, and more thanks to Julia's composability. Here we present the orbital solution for the binary system SAO 136799, as derived by Tokovinin et al. 2015[^1]
+Let's dive straight into some of the features Orbits.jl offers. Keplerian orbits are the backbone of astrodynamics, and we provide a "kitchen-sink" style [`KeplerianOrbit`](@ref). This means it wall try and parse whichever keyword arguments you provide, with units, uncertainties, and more thanks to Julia's composability. Here we present the orbital solution for the binary system SAO 136799, as derived by Tokovinin et al. 2015[^1]
 
 ```@example kep
 using Orbits

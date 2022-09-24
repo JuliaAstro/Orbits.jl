@@ -5,7 +5,6 @@ CurrentModule = Orbits
 # Orbits.jl
 
 [![GitHub](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/juliaastro/Orbits.jl)
-
 [![Build Status](https://github.com/juliaastro/Orbits.jl/workflows/CI/badge.svg?branch=main)](https://github.com/juliaastro/Orbits.jl/actions)
 [![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/O/Orbits.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
 [![Coverage](https://codecov.io/gh/juliaastro/Orbits.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/juliaastro/Orbits.jl)

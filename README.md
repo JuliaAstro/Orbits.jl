@@ -50,20 +50,38 @@ orbit = KeplerianOrbit(;
     a = 0.154u"arcsecond" * distance |> u"AU",
     omega = 72.6u"°",
 )
+
+# get position at specific time
+t = 2022.134u"yr"
+pos = relative_position(orbit, t)
+ra_off, dec_off = @. pos[1:2] / distance |> u"arcsecond"
+```
+
+```julia
+2-element Vector{Quantity{Float64, NoDims, Unitful.FreeUnits{(″,), NoDims, nothing}}}:
+  0.14482641030730156 ″
+ -0.07816487001285195 ″
+```
+
+---
+```julia
+# plot using Unitful recipes
 plot(orbit; distance, label="SAO 136799", leg=:topleft)
+scatter!([0u"arcsecond" ra_off], [0u"arcsecond" dec_off],
+          c=[:black 1], m=[:+ :o], lab=["A" "B"])
 ```
 
 ![](docs/src/assets/sao136799.png)
 
+---
 ```julia
-t = 2022.134u"yr"
-pa = Orbits.position_angle(orbit, t)
-sep = Orbits.separation(orbit, t)
+pa = round(Orbits.position_angle(orbit, t), sigdigits=5)
+sep = round(u"AU", Orbits.separation(orbit, t), sigdigits=5)
 pa, sep
 ```
 
 ```
-118.36, 23.783 AU
+(118.36, 23.782 AU)
 ```
 
 ## Contributing and Support

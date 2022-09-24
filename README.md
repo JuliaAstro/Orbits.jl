@@ -66,9 +66,9 @@ ra_off, dec_off = @. pos[1:2] / distance |> u"arcsecond"
 ---
 ```julia
 # plot using Unitful recipes
-plot(orbit; distance, label="SAO 136799", leg=:topleft)
+plot(orbit; distance, lab="", leg=:topleft)
 scatter!([0u"arcsecond" ra_off], [0u"arcsecond" dec_off],
-          c=[:black 1], m=[:+ :o], lab=["A" "B"])
+          c=[:black 1], m=[:+ :o], lab=["SAO 136799A" "B ($t)"])
 ```
 
 ![](docs/src/assets/sao136799.png)

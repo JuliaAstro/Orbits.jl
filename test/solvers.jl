@@ -1,7 +1,7 @@
 using Orbits: trueanom, kepler_solver
 
 # Compute sin_ν, cos_ν without using arctan function directly
-function compute_sincos_ν_no_atan(E, ecc; tol = 1e-10)
+function compute_sincos_ν_no_atan(E, ecc; tol=1e-10)
     sin_E, cos_E = sincos(E)
     denom = 1.0 + cos_E
 
@@ -64,14 +64,14 @@ end
 end
 
 @testset "kepler_solver: Let them eat π" begin
-    eccs = range(0.0, 1.0; length = 100)[begin:end-1]
+    eccs = range(0.0, 1.0; length=100)[begin:(end - 1)]
     Es = fill(π, length(eccs))
     test_vals(compute_summary(Es, eccs))
 end
 
 @testset "kepler_solver: solver" begin
-    ecc_range = range(0, 1; length = 500)[begin:end-1]
-    E_range = range(-300, 300; length = 1_001)
+    ecc_range = range(0, 1; length=500)[begin:(end - 1)]
+    E_range = range(-300, 300; length=1_001)
     E_ecc_pairs = Iterators.product(E_range, ecc_range)
     Es = reshape(map(x -> x[1], E_ecc_pairs), :, 1)
     eccs = reshape(map(x -> x[2], E_ecc_pairs), :, 1)

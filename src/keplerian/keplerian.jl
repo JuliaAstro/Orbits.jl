@@ -14,7 +14,6 @@ const G_nom = ustrip(u"Rsun^3/Msun/d^2", G_unit)
 include("kepler_helpers.jl")
 include("constructor.jl")
 
-
 # Finds the position `r` of the planet along its orbit after rotating
 # through the true anomaly `ν`, then transforms this from the
 # orbital plan to the equatorial plane
@@ -33,7 +32,7 @@ function _position(orbit, separation, true_anom_sin, true_anom_cos)
         r = separation * (1 + orbit.ecc) * (1 - orbit.ecc) / (1 + orbit.ecc * true_anom_cos)
     end
     # Transform from orbital plane to equatorial plane
-    X = SA[r*true_anom_cos, r*true_anom_sin, zero(r)] * oneunit(orbit.R_star)
+    X = SA[r * true_anom_cos, r * true_anom_sin, zero(r)] * oneunit(orbit.R_star)
     R = RotZXZ(orbit.Omega, -orbit.incl, orbit.omega)
     return R * X
 end
@@ -54,30 +53,30 @@ end
 
 function flip(orbit::KeplerianOrbit, R_planet)
     if isnothing(orbit.ecc) || iszero(orbit.ecc)
-        return KeplerianOrbit(
-            period = orbit.period,
-            tp = orbit.tp + 0.5 * orbit.period,
-            incl = orbit.incl,
-            Omega = orbit.Omega,
-            omega = orbit.omega,
-            M_star = orbit.M_planet,
-            M_planet = orbit.M_star,
-            R_star = R_planet,
-            R_planet = orbit.R_star,
-            ecc = orbit.ecc,
+        return KeplerianOrbit(;
+            period=orbit.period,
+            tp=orbit.tp + 0.5 * orbit.period,
+            incl=orbit.incl,
+            Omega=orbit.Omega,
+            omega=orbit.omega,
+            M_star=orbit.M_planet,
+            M_planet=orbit.M_star,
+            R_star=R_planet,
+            R_planet=orbit.R_star,
+            ecc=orbit.ecc,
         )
     else
-        return KeplerianOrbit(
-            period = orbit.period,
-            tp = orbit.tp,
-            incl = orbit.incl,
-            Omega = orbit.Omega,
-            omega = orbit.omega - π,
-            M_star = orbit.M_planet,
-            M_planet = orbit.M_star,
-            R_star = R_planet,
-            R_planet = orbit.R_star,
-            ecc = orbit.ecc,
+        return KeplerianOrbit(;
+            period=orbit.period,
+            tp=orbit.tp,
+            incl=orbit.incl,
+            Omega=orbit.Omega,
+            omega=orbit.omega - π,
+            M_star=orbit.M_planet,
+            M_planet=orbit.M_star,
+            R_star=R_planet,
+            R_planet=orbit.R_star,
+            ecc=orbit.ecc,
         )
     end
 end

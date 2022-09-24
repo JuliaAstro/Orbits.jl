@@ -97,28 +97,27 @@ function KeplerianOrbit(
     if (isnothing(nt.ecc) || iszero(nt.ecc)) && !isnothing(nt.duration)
         isnothing(nt.b) && throw(
             ArgumentError(
-                "`b` must also be provided for a circular orbit if `duration given`",
+                "`b` must also be provided for a circular orbit if `duration given`"
             ),
         )
         isnothing(nt.r) &&
             throw(ArgumentError("`r` must also be provided if `duration` given"))
     end
 
-    a, aR_star, period, rho_star, R_star, M_star, M_planet, duration =
-        compute_consistent_inputs(
-            nt.a,
-            nt.aR_star,
-            nt.period,
-            nt.rho_star,
-            nt.R_star,
-            nt.M_star,
-            nt.M_planet,
-            G,
-            nt.ecc,
-            nt.duration,
-            nt.b,
-            nt.r,
-        )
+    a, aR_star, period, rho_star, R_star, M_star, M_planet, duration = compute_consistent_inputs(
+        nt.a,
+        nt.aR_star,
+        nt.period,
+        nt.rho_star,
+        nt.R_star,
+        nt.M_star,
+        nt.M_planet,
+        G,
+        nt.ecc,
+        nt.duration,
+        nt.b,
+        nt.r,
+    )
     r = isnothing(nt.r) ? zero(aR_star) : nt.r
     M_tot = compute_M_tot(M_star, M_planet)
     R_planet = compute_R_planet(R_star, r, nt.R_planet)
@@ -189,7 +188,7 @@ function KeplerianOrbit(
     end
 
     # Compute remaining system parameters
-    t0, tp = compute_t0_tp(nt.t0, nt.tp; M0 = M0, n = n)
+    t0, tp = compute_t0_tp(nt.t0, nt.tp; M0=M0, n=n)
     t_ref = tp - t0
 
     # Sanitize dimensionless units
@@ -231,25 +230,25 @@ function KeplerianOrbit(
 end
 
 @kwcall KeplerianOrbit(
-    period = nothing,
-    t0 = nothing,
-    tp = nothing,
-    duration = nothing,
-    a = nothing,
-    R_planet = nothing,
-    R_star = nothing,
-    rho_star = nothing,
-    r = nothing,
-    aR_star = nothing,
-    b = nothing,
-    ecc = 0.0,
-    cos_omega = nothing,
-    sin_omega = nothing,
-    incl = nothing,
-    omega = 0.0,
-    Omega = 0.0,
-    M_planet = nothing,
-    M_star = nothing,
+    period=nothing,
+    t0=nothing,
+    tp=nothing,
+    duration=nothing,
+    a=nothing,
+    R_planet=nothing,
+    R_star=nothing,
+    rho_star=nothing,
+    r=nothing,
+    aR_star=nothing,
+    b=nothing,
+    ecc=0.0,
+    cos_omega=nothing,
+    sin_omega=nothing,
+    incl=nothing,
+    omega=0.0,
+    Omega=0.0,
+    M_planet=nothing,
+    M_star=nothing,
 )
 
 @kwalias KeplerianOrbit [
@@ -273,18 +272,7 @@ end
 ]
 
 function compute_consistent_inputs(
-    a,
-    aR_star,
-    period,
-    rho_star,
-    R_star,
-    M_star,
-    M_planet,
-    G,
-    ecc,
-    duration,
-    b,
-    r,
+    a, aR_star, period, rho_star, R_star, M_star, M_planet, G, ecc, duration, b, r
 )
     if isnothing(a) && isnothing(period)
         throw(ArgumentError("At least `a` or `P` must be specified"))
@@ -292,7 +280,7 @@ function compute_consistent_inputs(
 
     if (isnothing(ecc) || iszero(ecc)) && !isnothing(duration)
         isnothing(R_star) && (R_star = compute_R_star_nom(G))
-        aR_star = compute_aor(duration, period, b, r = r)
+        aR_star = compute_aor(duration, period, b; r=r)
         a = compute_a(aR_star, R_star)
         duration = nothing
     end
@@ -372,7 +360,7 @@ end
 stringify_units(value::Nothing, unit) = "$(value)"
 stringify_units(value) = @sprintf "%.4f" value
 function Base.show(io::IO, ::MIME"text/plain", orbit::KeplerianOrbit)
-    print(
+    return print(
         IOContext(io, :fancy_exponent => false),
         """
         Keplerian Orbit

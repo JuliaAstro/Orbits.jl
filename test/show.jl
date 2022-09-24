@@ -1,5 +1,5 @@
 @testset "SimpleOrbit" begin
-    orbit = SimpleOrbit(duration = 1, period = 3)
+    orbit = SimpleOrbit(; duration=1, period=3)
 
     @test sprint(show, orbit) == "SimpleOrbit(P=3, T=1, t0=0, b=0)"
 
@@ -12,26 +12,26 @@
 end
 
 @testset "KeplerianOrbit" begin
-    orbit = KeplerianOrbit(
-        ρ_star = 1.0,
-        R_star = cbrt(3.0 / (4.0 * π)),
-        period = 2.0,
-        ecc = 0.0,
-        t_0 = 0.0,
-        incl = π / 2.0,
-        Ω = 0.0,
-        ω = 0.0,
+    orbit = KeplerianOrbit(;
+        ρ_star=1.0,
+        R_star=cbrt(3.0 / (4.0 * π)),
+        period=2.0,
+        ecc=0.0,
+        t_0=0.0,
+        incl=π / 2.0,
+        Ω=0.0,
+        ω=0.0,
     )
 
-    orbit_unit = KeplerianOrbit(
-        ρ_star = 1.0u"g/cm^3",
-        R_star = cbrt(3.0 / (4.0 * π))u"Rsun",
-        period = 2.0u"d",
-        ecc = 0.0,
-        t_0 = 0.0u"d",
-        incl = π / 2.0,
-        Ω = 0.0,
-        ω = 0.0,
+    orbit_unit = KeplerianOrbit(;
+        ρ_star=1.0u"g/cm^3",
+        R_star=cbrt(3.0 / (4.0 * π))u"Rsun",
+        period=2.0u"d",
+        ecc=0.0,
+        t_0=0.0u"d",
+        incl=π / 2.0,
+        Ω=0.0,
+        ω=0.0,
     )
 
     @test repr("text/plain", orbit) === """

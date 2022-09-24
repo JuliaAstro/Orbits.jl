@@ -24,7 +24,7 @@ compute_rho(M, R) = 0.75 * M / (π * R^3)
 compute_rho(M, R::Nothing) = nothing
 
 # Semi-major axis / star radius ratio, assuming circular orbit
-function compute_aor(duration, period, b; r = nothing)
+function compute_aor(duration, period, b; r=nothing)
     r = isnothing(r) ? 0.0 : r
     sin_ϕ, cos_ϕ = sincos(π * duration / period)
     return sqrt((1 + r)^2 - (b * cos_ϕ)^2) / sin_ϕ
@@ -45,8 +45,9 @@ end
 compute_b(cos_incl, dcosi_db) = cos_incl / dcosi_db
 
 # Inclination factor
-compute_incl_factor_inv(ecc, sin_omega) =
-    (1.0 - ecc) * (1.0 + ecc) / (1.0 + ecc * sin_omega)
+function compute_incl_factor_inv(ecc, sin_omega)
+    return (1.0 - ecc) * (1.0 + ecc) / (1.0 + ecc * sin_omega)
+end
 
 # Jacobian for cos(i) -> b
 compute_dcosi_db(a, R_star, incl_factor_inv) = R_star / (a * incl_factor_inv)
@@ -58,7 +59,9 @@ compute_R_planet(R_star, r, R_planet::Nothing) = iszero(r) ? zero(R_star) : R_st
 # Transit times
 compute_t0_tp(t0::Nothing, tp; M0, n) = (tp + M0 / n, tp)
 compute_t0_tp(t0, tp::Nothing; M0, n) = (t0, t0 - M0 / n)
-compute_t0_tp(t0::Nothing, tp::Nothing; kwargs...) =
+function compute_t0_tp(t0::Nothing, tp::Nothing; kwargs...)
     throw(ArgumentError("Please specify either `t0` or `tp`"))
-compute_t0_tp(t0, tp; kwargs...) =
+end
+function compute_t0_tp(t0, tp; kwargs...)
     throw(ArgumentError("Please only specify one of `t0` or `tp`"))
+end

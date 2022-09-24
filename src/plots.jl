@@ -1,6 +1,6 @@
 using RecipesBase
 
-@recipe function f(orbit::KeplerianOrbit; N = 90, distance = nothing)
+@recipe function f(orbit::KeplerianOrbit; N=90, distance=nothing)
     # We almost always want to see spatial coordinates with equal step sizes
     aspect_ratio --> 1
     # And we almost always want to reverse the RA coordinate to match how we
@@ -13,15 +13,15 @@ using RecipesBase
 
     # We trace out in equal steps of true anomaly instead of time for a smooth
     # curve, regardless of eccentricity.
-    νs = range(-π, π; length = N)
+    νs = range(-π, π; length=N)
     pos = @. _position(orbit, -orbit.aR_star, sin(νs), cos(νs))
 
     xs = map(p -> p[1], pos)
     ys = map(p -> p[2], pos)
 
     if !isnothing(distance)
-        xs = @. xs / distance |> u"arcsecond"
-        ys = @. ys / distance |> u"arcsecond"
+        xs = @. uconvert(u"arcsecond", xs / distance)
+        ys = @. uconvert(u"arcsecond", ys / distance)
         xguide --> "Δra"
         yguide --> "Δdec"
     end

@@ -40,8 +40,6 @@ function separation(orbit::AbstractOrbit, t)
     return sqrt(x^2 + y^2)
 end
 
-
-
 """
     flip(::AbstractOrbit)
     

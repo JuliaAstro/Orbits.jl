@@ -5,7 +5,7 @@ using Orbits: relative_position
     t0 = 1.45
     b = 0.5
     duration = 0.12
-    t = t0 .+ range(-2.0 * period, 2.0 * period, length = 5000)
+    t = t0 .+ range(-2.0 * period, 2.0 * period; length=5000)
     m0 = @. abs(mod(t - t0 + 0.5 * period, period) - 0.5 * period) < 0.5 * duration
 
     orbit = SimpleOrbit(; period, t0, b, duration)

@@ -20,9 +20,37 @@ example, a distance of 2 is 2 *stellar* radii.
 """
 relative_position(::AbstractOrbit, t)
 
+"""
+    position_angle(::AbstractOrbit, t)
+
+Calculates the position angle (in degrees) of the companion at time `t`
+"""
+function position_angle(orbit::AbstractOrbit, t)
+    x, y, _ = relative_position(orbit, t)
+    return atand(x, y)
+end
+
+"""
+    separation(::AbstractOrbit, t)
+
+Calculates the separation of the companion at time `t`
+"""
+function separation(orbit::AbstractOrbit, t)
+    x, y, _ = relative_position(orbit, t)
+    return sqrt(x^2 + y^2)
+end
+
+
+
+"""
+    flip(::AbstractOrbit)
+    
+Return a new orbit with the primary and secondary swapped.
+"""
+function flip end
 
 include("simple.jl")
-include("keplerian.jl")
+include("keplerian/keplerian.jl")
 include("plots.jl")
 
 end # module

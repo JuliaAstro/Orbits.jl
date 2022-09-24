@@ -6,6 +6,7 @@
 Let's dive straight into some of the features Orbits.jl offers. Keplerian orbits are the backbone of astrodynamics, and we provide a "kitchen-sink" style [`KeplerianOrbit`](@ref). This means it wall try and parse whichever keyword arguments you provide, with units, uncertainties, and more thanks to Julia's composability. Here we present the orbital solution for the binary system SAO 136799, as derived by Tokovinin et al. 2015[^1]
 
 ```@example kep
+using Measurements
 using Orbits
 using Plots
 using Unitful
@@ -15,11 +16,11 @@ using UnitfulRecipes
 distance = inv(6.92e-3)u"pc"
 
 orbit = KeplerianOrbit(;
-    period = 40.57 ± 0.19)u"yr",
+    period = (40.57 ± 0.19)u"yr",
     ecc = 0.42 ± 0.009,
-    Omega = 318.6 ± 0.6)u"°",
-    tp = 1972.12 ± 0.16)u"yr",
-    incl = 54.7 ± 0.6)u"°",
+    Omega = (318.6 ± 0.6)u"°",
+    tp = (1972.12 ± 0.16)u"yr",
+    incl = (54.7 ± 0.6)u"°",
     a = (0.154 ± 0.001)u"arcsecond" * distance |> u"AU",
     omega = (72.6 ± 0.8)u"°",
 )

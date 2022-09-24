@@ -36,7 +36,31 @@ end
     recipes = apply_recipe(Dict{Symbol,Any}(), b_rho_star_units)
     for rec in recipes
         @test getfield(rec, 1) ==
-              Dict{Symbol,Any}(:seriestype => :line, :xguide => "Δx", :yguide => "Δy")
+              Dict{Symbol,Any}(:seriestype => :line, :xguide => "Δx", :yguide => "Δy", :xflip => true)
+
+        x = rec.args[1]
+        y = rec.args[2]
+
+        @test length(x) == length(y)
+    end
+end
+@testset "KeplerianOrbit plotting with distance" begin
+    distance = inve(6.92e-3)u"pc"
+
+    orbit = KeplerianOrbit(;
+        period = 40.57u"yr",
+        ecc = 0.42,
+        Omega = 318.6u"°",
+        tp = 1972.12u"yr",
+        incl = 54.7u"°",
+        a = 0.154u"arcsecond" * distance |> u"AU",
+        omega = 72.6u"°",
+    )
+
+    recipes = apply_recipe(Dict{Symbol,Any}(), orbit; distance)
+    for rec in recipes
+        @test getfield(rec, 1) ==
+              Dict{Symbol,Any}(:seriestype => :line, :xguide => "Δra", :yguide => "Δdec", :xflip => true)
 
         x = rec.args[1]
         y = rec.args[2]

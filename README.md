@@ -34,18 +34,36 @@ pkg> add Orbits#main
 
 ```julia
 using Orbits
+using Plots
+using Unitful, UnitfulAstro
+using UnitfulRecipes
 
-orbit = SimpleOrbit(period=3, duration=1)
+# orbital params for SAO 136799
+distance = inv(6.92e-3)u"pc"
+
+orbit = KeplerianOrbit(;
+    period = 40.57u"yr",
+    ecc = 0.42,
+    Omega = 318.6u"°",
+    tp = 1972.12u"yr",
+    incl = 54.7u"°",
+    a = 0.154u"arcsecond" * distance |> u"AU",
+    omega = 72.6u"°",
+)
+plot(orbit; distance, label="SAO 136799", leg=:topleft)
 ```
 
-## Using Units
-
-Units from `Unitful.jl` are a drop-in substitution for numbers
+![](docs/src/assets/sao136799.png)
 
 ```julia
-using Unitful
-orbit = SimpleOrbit(period=10u"d", duration=5u"hr")
-t = range(-6, 6, length=1000)u"hr"
+t = 2022.134u"yr"
+pa = Orbits.position_angle(orbit, t)
+sep = Orbits.separation(orbit, t)
+pa, sep
+```
+
+```
+118.36, 23.783 AU
 ```
 
 ## Contributing and Support

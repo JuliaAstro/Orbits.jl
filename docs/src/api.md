@@ -11,4 +11,5 @@ KeplerianOrbit
 relative_position
 Orbits.separation
 Orbits.position_angle
+Orbits.flip
 ```

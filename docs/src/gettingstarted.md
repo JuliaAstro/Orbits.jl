@@ -1,24 +1,11 @@
 
 # Getting Started
 
-## Usage
+## Keplerian Orbits
 
-Let's create the simplest realization of an orbit we can- the [`SimpleOrbit`](@ref)
-
-```@example simple
-using Orbits
-using Plots
-using Unitful
-using UnitfulAstro
-using UnitfulRecipes
-
-orbit = SimpleOrbit(period=10u"d", duration=5u"hr")
-```
-
-let's look at a more advanced orbit. Here we present the orbital solution for the binary system SAO 136799, as derived by Tokovinin et al. 2015[^1]
+Let's dive straight into some of the features Orbits.jl offers. Keplerian orbits are the backbone of astronomical dynamics, and we provide a "kitchen-sink" style [`KeplerianOrbit`](@ref). This means it wall try and parse whichever keyword arguments you provide, with units, uncertainties, and more thanks to Julia's composability. Here we present the orbital solution for the binary system SAO 136799, as derived by Tokovinin et al. 2015[^1]
 
 ```@example kep
-using Measurements
 using Orbits
 using Plots
 using Unitful
@@ -28,12 +15,12 @@ using UnitfulRecipes
 distance = inv(6.92e-3)u"pc"
 
 orbit = KeplerianOrbit(;
-    period = (40.57 ± 0.19)u"yr",
+    period = 40.57 ± 0.19)u"yr",
     ecc = 0.42 ± 0.009,
-    Omega = (318.6 ± 0.6)u"°",
-    tp = (1972.12 ± 0.16)u"yr",
-    incl = (54.7 ± 0.6)u"°",
-    a = (0.154 ± 0.001) * 144.51u"AU",
+    Omega = 318.6 ± 0.6)u"°",
+    tp = 1972.12 ± 0.16)u"yr",
+    incl = 54.7 ± 0.6)u"°",
+    a = (0.154 ± 0.001)u"arcsecond" * distance |> u"AU",
     omega = (72.6 ± 0.8)u"°",
 )
 plot(orbit; label="")
@@ -106,6 +93,5 @@ using Measurements: value
 
 coord = offset(origin, value(sep), deg2rad(value(pa)))
 ```
-
 
 [^1]: Tokovinin et al. (2015) "Speckle Interferometry at SOAR in 2014" ([ads](https://ui.adsabs.harvard.edu/abs/2015AJ....150...50T))

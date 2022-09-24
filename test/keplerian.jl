@@ -629,28 +629,17 @@ end
 
 
 @testset "KeplerianOrbit: position angle and separation" begin
-    unit_circle = KeplerianOrbit(;
-        period=1,
-        tp=0,
-        a=1,
-        incl=0
-    )
+    unit_circle = KeplerianOrbit(; period = 1, tp = 0, a = 1, incl = 0)
 
     # reminder, PA is from positive y-axis towards positive x-axis
     # therefore, angle should be atand(x, y)
     @test position_angle(unit_circle, 0) ≈ -90
     @test position_angle(unit_circle, 0.25) ≈ -180
     @test position_angle(unit_circle, 0.5) ≈ 90
-    @test position_angle(unit_circle, 0.75) ≈ 0 atol=1e-8
+    @test position_angle(unit_circle, 0.75) ≈ 0 atol = 1e-8
     @test all(t -> separation(unit_circle, t) ≈ 1, 0:0.25:0.75)
 
-    ell = KeplerianOrbit(;
-        period=1,
-        ecc = 0.5,
-        tp=0,
-        a = 1,
-        incl=0
-    )
+    ell = KeplerianOrbit(; period = 1, ecc = 0.5, tp = 0, a = 1, incl = 0)
 
     @test separation(ell, 0) ≈ (1 - ell.ecc) * ell.a
     @test separation(ell, 0.5) ≈ (1 + ell.ecc) * ell.a

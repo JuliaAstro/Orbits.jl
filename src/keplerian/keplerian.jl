@@ -81,4 +81,3 @@ function flip(orbit::KeplerianOrbit, R_planet)
         )
     end
 end
-

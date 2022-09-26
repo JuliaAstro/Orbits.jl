@@ -3,7 +3,7 @@
 
 ## Keplerian Orbits
 
-Let's dive straight into some of the features Orbits.jl offers. Keplerian orbits are the backbone of astrodynamics, and we provide a "kitchen-sink" style [`KeplerianOrbit`](@ref). This means it wall try and parse whichever keyword arguments you provide, with units, uncertainties, and more thanks to Julia's composability. Here we present the orbital solution for the binary system SAO 136799, as derived by Tokovinin et al. 2015[^1]
+Let's dive straight into some of the features Orbits.jl offers. Keplerian orbits are the backbone of astrodynamics, and we provide a "kitchen-sink" style [`KeplerianOrbit`](@ref). This means it will try and parse whichever keyword arguments you provide, with units, uncertainties, and more thanks to Julia's composability. Here we present the orbital solution for the binary system SAO 136799, as derived by Tokovinin et al. 2015[^1]
 
 ```@example kep
 using Measurements
@@ -37,7 +37,7 @@ scatter!([0], [0], c=:black, marker=:+, lab="SAO 136799A")
 
 ## Calculating ephemerides
 
-Using out above orbit, let's figure out the position of the secondary star on a specific date
+Using our above orbit, let's figure out the position of the secondary star on a specific date
 
 ```@example kep
 using Dates
@@ -80,7 +80,7 @@ scatter([deg2rad(pa - 270)], [sep], proj=:polar, lab="SAO 136799B")
 
 ### SkyCoords.jl
 
-These ephemerides can be translated into SkyCoords easily-
+These ephemerides can be translated into [SkyCoords](http://juliaastro.org/SkyCoords.jl/stable/) easily
 
 ```@example kep
 using AstroAngles

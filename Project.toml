@@ -1,7 +1,7 @@
 name = "Orbits"
 uuid = "88f3d70c-3a4c-11ed-1389-4902f2e49de8"
 authors = ["Miles Lucas <mdlucas@hawaii.edu> and contributors"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 AstroLib = "c7932e45-9af1-51e7-9da9-f004cd3a462b"

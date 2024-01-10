@@ -3,6 +3,13 @@
 
 Keplerian orbit parameterized by the basic observables of a transiting 2-body system.
 
+The following units are used by default:
+    * d: Days
+    * R⊙: Solar radius
+    * M⊙: Solar mass
+    * M⊙/R⊙³: Solar density
+    * rad: Radians 
+
 # Parameters
 * `period`/`P` -- The orbital period of the planet [d].
 * `t0`/`t_0` -- The midpoint time of the reference transit [d].

@@ -1,12 +1,12 @@
 # Orbits.jl
 
-[![Build Status](https://github.com/juliaastro/Orbits.jl/workflows/CI/badge.svg?branch=main)](https://github.com/juliaastro/Orbits.jl/actions)
-[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/O/Orbits.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
-[![Coverage](https://codecov.io/gh/juliaastro/Orbits.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/juliaastro/Orbits.jl)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.github.io/Orbits/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.github.io/Orbits.jl/dev/)
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.github.io/Orbits.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.github.io/Orbits.jl/dev)
+[![CI](https://github.com/JuliaAstro/Orbits.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/JuliaAstro/Orbits.jl/actions/workflows/ci.yml)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/O/Orbits.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![codecov](https://codecov.io/gh/juliaastro/Orbits.jl/graph/badge.svg?token=0PXylAA9Ig)](https://codecov.io/gh/juliaastro/Orbits.jl)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Flexible and fast astronomical orbits (originally a submodule of [Transits.jl](https://github.com/JuliaAstro/Transits.jl)).
 

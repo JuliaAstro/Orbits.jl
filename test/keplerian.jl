@@ -10,11 +10,11 @@ using Orbits:
     _planet_position,
     stringify_units,
     position_angle,
-    separation
+    separation,
+    G_nom # Rsun^3/Msun/d^2
 using Statistics
 
 # Constants
-const G_nom = 2942.2062175044193 # Rsun^3/Msun/d^2
 const MsunRsun_to_gcc = ustrip(u"g/cm^3", 1.0u"Msun/Rsun^3")
 
 # Setup python env

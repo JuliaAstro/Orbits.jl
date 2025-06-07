@@ -27,7 +27,7 @@ Calculates the position angle (in degrees) of the companion at time `t`
 """
 function position_angle(orbit::AbstractOrbit, t)
     x, y, _ = relative_position(orbit, t)
-    return atand(-y, -x)
+    return atand(x, y)
 end
 
 """

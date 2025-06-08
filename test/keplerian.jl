@@ -24,6 +24,8 @@ CondaPkg.add(["numpy", "batman-package"])
 @info CondaPkg.status()
 
 @pyexec """
+global np, _rsky
+
 import numpy as np
 from batman import _rsky
 
@@ -320,27 +322,27 @@ end
 #    )
 #    @test orbit_M_star.R_star == 3.0^(1 / 3)
 #end
-#
-#@testset "KeplerianOrbit: small star" begin
-#    # Sample model from `Orbits.jl`
-#    orbit = KeplerianOrbit(;
-#        R_star=0.189, M_star=0.151, period=0.4626413, t0=0.2, b=0.5, ecc=0.1, omega=0.1
-#    )
-#
-#    # Comparison coords from `batman`
-#    star = pyconvert(Dict, small_star(
-#        orbit.period, orbit.t0, orbit.aR_star, orbit.incl, orbit.ecc, orbit.omega
-#    ))
-#
-#    # Compare
-#    t = star["t"]
-#    r_batman = star["r_batman"]
-#    m = star["m"]
-#    r = compute_r.(orbit, t)
-#    @test count(m) > 0
-#    @test allclose(r_batman[m], r[m], atol=2e-5)
-#end
-#
+
+@testset "KeplerianOrbit: small star" begin
+    # Sample model from `Orbits.jl`
+    orbit = KeplerianOrbit(;
+        R_star=0.189, M_star=0.151, period=0.4626413, t0=0.2, b=0.5, ecc=0.1, omega=0.1
+    )
+
+    # Comparison coords from `batman`
+    star = pyconvert(Dict, small_star(
+        orbit.period, orbit.t0, orbit.aR_star, orbit.incl, orbit.ecc, orbit.omega
+    ))
+
+    # Compare
+    t = star["t"]
+    r_batman = star["r_batman"]
+    m = star["m"]
+    r = compute_r.(orbit, t)
+    @test count(m) > 0
+    @test allclose(r_batman[m], r[m], atol=2e-5)
+end
+
 #@testset "KeplerianOrbit: impact" begin
 #    # Sample model from `Orbits.jl`
 #    orbit = KeplerianOrbit(;

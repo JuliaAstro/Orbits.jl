@@ -13,4 +13,4 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
-CondaPkg = "=0.2.16"
+CondaPkg = "=0.2.4"

@@ -22,10 +22,8 @@ using PythonCall, CondaPkg
 CondaPkg.add(["numpy", "batman-package"])
 CondaPkg.resolve()
 
-@info CondaPkg.status()
-
 @pyexec """
-global np, _rsky
+global numpy, np, batman, _rsky
 
 import numpy as np
 from batman import _rsky

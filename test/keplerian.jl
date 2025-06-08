@@ -20,6 +20,7 @@ const MsunRsun_to_gcc = ustrip(u"g/cm^3", 1.0u"Msun/Rsun^3")
 # Activate python env
 using PythonCall, CondaPkg
 CondaPkg.add(["numpy", "batman-package"])
+CondaPkg.resolve(force=true)
 
 @info CondaPkg.status()
 

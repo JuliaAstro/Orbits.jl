@@ -24,8 +24,8 @@ CondaPkg.add(["numpy", "batman-package"])
 @pyexec """
 global np, _rsky
 
-import numpy as np
 from batman import _rsky
+import numpy as np
 
 def ords():
    t = np.linspace(-100, 100, 1_000)

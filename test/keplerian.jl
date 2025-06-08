@@ -21,7 +21,9 @@ const MsunRsun_to_gcc = ustrip(u"g/cm^3", 1.0u"Msun/Rsun^3")
 using PythonCall, CondaPkg
 CondaPkg.add(["numpy", "batman-package"])
 
-pyexec("""
+@info CondaPkg.status()
+
+@pyexec """
 import numpy as np
 from batman import _rsky
 
@@ -82,10 +84,7 @@ def small_star(period, t0, aR_star, incl, ecc, omega):
        "r_batman": r_batman,
        "m": m,
     }
-""", Main)
-
-sky_coords = pyeval(Dict, "sky_coords", Main)
-small_star = pyeval("small_star", Main)
+""" => (sky_coords::Dict{String, Any}, small_star)
 
 function compute_r(orbit, t)
     pos = relative_position(orbit, t)

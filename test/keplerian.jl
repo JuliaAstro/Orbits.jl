@@ -22,10 +22,12 @@ using PythonCall, CondaPkg
 CondaPkg.add(["numpy", "batman-package"])
 CondaPkg.resolve()
 
-pyexec("import numpy as np", Main)
-pyexec("from batman import _rsky", Main)
-
 @pyexec """
+global numpy, np, batman, _rsky
+
+import numpy as np
+from batman import _rsky
+
 def sky_coords():
     t = np.linspace(-100, 100, 1_000)
 

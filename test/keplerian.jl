@@ -24,10 +24,10 @@ CondaPkg.add(["numpy", "batman-package"])
 @pyexec """
 global np, _rsky
 
-from batman import _rsky
 import numpy as np
+from batman import _rsky
 
-def ords():
+def sky_coords():
    t = np.linspace(-100, 100, 1_000)
 
    t0, period, a, e, omega, incl = (
@@ -85,7 +85,7 @@ def small_star(period, t0, aR_star, incl, ecc, omega):
        "r_batman": r_batman,
        "m": m,
    }
-""" => (ords, small_star)
+""" => (sky_coords, small_star)
 
 function compute_r(orbit, t)
     pos = relative_position(orbit, t)
@@ -100,7 +100,7 @@ as_matrix(pos) = permutedims(reinterpret(reshape, Float64, pos))
 
 @testset "KeplerianOrbit: sky coords" begin
     # Comparison coords from `batman`
-    sc = pyconvert(Dict, ords())
+    sc = pyconvert(Dict, sky_coords())
 
     # Create comparison orbits from Orbits.jl
     orbits = map(1:length(sc["t0"])) do i

@@ -29,9 +29,9 @@ import numpy as np
 from batman import _rsky
 
 def sky_coords():
-   t = np.linspace(-100, 100, 1_000)
+    t = np.linspace(-100, 100, 1_000)
 
-   t0, period, a, e, omega, incl = (
+    t0, period, a, e, omega, incl = (
        x.flatten()
        for x in np.meshgrid(
            np.linspace(-5.0, 5.0, 2),
@@ -41,18 +41,18 @@ def sky_coords():
            np.linspace(-np.pi, np.pi, 3),
            np.arccos(np.linspace(0, 1, 5)[:-1]),
        )
-   )
+    )
 
-   r_batman = np.empty((len(t), len(t0)))
+    r_batman = np.empty((len(t), len(t0)))
 
-   for i in range(len(t0)):
+    for i in range(len(t0)):
        r_batman[:, i] = _rsky._rsky(
            t, t0[i], period[i], a[i], incl[i], e[i], omega[i], 1, 1
        )
 
-   m = r_batman < 100.0
+    m = r_batman < 100.0
 
-   return {
+    return {
        "m_sum" : m.sum().item(), # Save native Int format
        "r_batman" : r_batman,
        "m" : m,
@@ -63,11 +63,11 @@ def sky_coords():
        "e" : e,
        "omega" : omega,
        "incl" : incl,
-   }
+    }
 
 def small_star(period, t0, aR_star, incl, ecc, omega):
-   t = np.linspace(0, period, 500)
-   r_batman = _rsky._rsky(
+    t = np.linspace(0, period, 500)
+    r_batman = _rsky._rsky(
        t,
        t0,
        period,
@@ -77,15 +77,15 @@ def small_star(period, t0, aR_star, incl, ecc, omega):
        omega,
        1,
        1
-   )
+    )
 
-   m = r_batman < 100.0
+    m = r_batman < 100.0
 
-   return {
+    return {
        "t": t,
        "r_batman": r_batman,
        "m": m,
-   }
+    }
 """ => (sky_coords, small_star)
 
 function compute_r(orbit, t)

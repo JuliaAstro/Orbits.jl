@@ -6,7 +6,6 @@ using UnitfulAstro
 
 Unitful.preferunits(u"Rsun,Msun,d"...)
 ENV["UNITFUL_FANCY_EXPONENTS"] = false
-ENV["JULIA_CONDAPKG_BACKEND"] = "MicroMamba"
 
 # Numpy version of `isapprox`
 # https://stackoverflow.com/questions/27098844/allclose-how-to-check-if-two-arrays-are-close-in-julia/27100515#27100515

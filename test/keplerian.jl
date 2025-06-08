@@ -20,52 +20,46 @@ const MsunRsun_to_gcc = ustrip(u"g/cm^3", 1.0u"Msun/Rsun^3")
 # Activate python env
 using PythonCall, CondaPkg
 CondaPkg.add(["numpy", "batman-package"])
-CondaPkg.resolve()
-
-@info :wearehere @__DIR__
 
 @pyexec """
-global numpy, np, batman, _rsky
-
 import numpy as np
 from batman import _rsky
 
-def sky_coords():
-    t = np.linspace(-100, 100, 1_000)
+t = np.linspace(-100, 100, 1_000)
 
-    t0, period, a, e, omega, incl = (
-       x.flatten()
-       for x in np.meshgrid(
-           np.linspace(-5.0, 5.0, 2),
-           np.exp(np.linspace(np.log(5.0), np.log(50.0), 3)),
-           np.linspace(50.0, 100.0, 2),
-           np.linspace(0.0, 0.9, 5),
-           np.linspace(-np.pi, np.pi, 3),
-           np.arccos(np.linspace(0, 1, 5)[:-1]),
-       )
-    )
+t0, period, a, e, omega, incl = (
+   x.flatten()
+   for x in np.meshgrid(
+       np.linspace(-5.0, 5.0, 2),
+       np.exp(np.linspace(np.log(5.0), np.log(50.0), 3)),
+       np.linspace(50.0, 100.0, 2),
+       np.linspace(0.0, 0.9, 5),
+       np.linspace(-np.pi, np.pi, 3),
+       np.arccos(np.linspace(0, 1, 5)[:-1]),
+   )
+)
 
-    r_batman = np.empty((len(t), len(t0)))
+r_batman = np.empty((len(t), len(t0)))
 
-    for i in range(len(t0)):
-       r_batman[:, i] = _rsky._rsky(
-           t, t0[i], period[i], a[i], incl[i], e[i], omega[i], 1, 1
-       )
+for i in range(len(t0)):
+   r_batman[:, i] = _rsky._rsky(
+       t, t0[i], period[i], a[i], incl[i], e[i], omega[i], 1, 1
+   )
 
-    m = r_batman < 100.0
+m = r_batman < 100.0
 
-    return {
-       "m_sum" : m.sum().item(), # Save native Int format
-       "r_batman" : r_batman,
-       "m" : m,
-       "t" : t,
-       "t0" : t0,
-       "period" : period,
-       "a" : a,
-       "e" : e,
-       "omega" : omega,
-       "incl" : incl,
-    }
+sky_coords = {
+   "m_sum" : m.sum().item(), # Save native Int format
+   "r_batman" : r_batman,
+   "m" : m,
+   "t" : t,
+   "t0" : t0,
+   "period" : period,
+   "a" : a,
+   "e" : e,
+   "omega" : omega,
+   "incl" : incl,
+}
 
 def small_star(period, t0, aR_star, incl, ecc, omega):
     t = np.linspace(0, period, 500)
@@ -88,7 +82,7 @@ def small_star(period, t0, aR_star, incl, ecc, omega):
        "r_batman": r_batman,
        "m": m,
     }
-""" => (sky_coords, small_star)
+""" => (sky_coords::Dict{String, Any}, small_star)
 
 function compute_r(orbit, t)
     pos = relative_position(orbit, t)
@@ -102,25 +96,22 @@ as_matrix(pos) = permutedims(reinterpret(reshape, Float64, pos))
 # https://github.com/exoplanet-dev/exoplanet/blob/main/tests/orbits/keplerian_test.py
 
 @testset "KeplerianOrbit: sky coords" begin
-    # Comparison coords from `batman`
-    sc = pyconvert(Dict, sky_coords())
-
     # Create comparison orbits from Orbits.jl
-    orbits = map(1:length(sc["t0"])) do i
+    orbits = map(1:length(sky_coords["t0"])) do i
         return KeplerianOrbit(;
-            aR_star = sc["a"][i],
-            P = sc["period"][i],
-            incl = sc["incl"][i],
-            t0 = sc["t0"][i],
-            ecc = sc["e"][i],
+            aR_star = sky_coords["a"][i],
+            P = sky_coords["period"][i],
+            incl = sky_coords["incl"][i],
+            t0 = sky_coords["t0"][i],
+            ecc = sky_coords["e"][i],
             Omega = 0.0,
-            omega = sc["omega"][i],
+            omega = sky_coords["omega"][i],
         )
     end
 
     # Compute coords
-    t = sc["t"]
-    x = Matrix{Float64}(undef, length(sc["t"]), length(sc["t0"]))
+    t = sky_coords["t"]
+    x = Matrix{Float64}(undef, length(sky_coords["t"]), length(sky_coords["t0"]))
     y = similar(x)
     z = similar(x)
     for (col, orbit) in enumerate(orbits)
@@ -133,10 +124,10 @@ as_matrix(pos) = permutedims(reinterpret(reshape, Float64, pos))
     end
 
     # Compare
-    m = sc["m"]
+    m = sky_coords["m"]
     r = hypot.(x, y)
     r_Orbits = r[m]
-    r_batman = sc["r_batman"][m]
+    r_batman = sky_coords["r_batman"][m]
 
     @test count(m) > 0
     @test allclose(r_Orbits, r_batman, atol=2e-5)

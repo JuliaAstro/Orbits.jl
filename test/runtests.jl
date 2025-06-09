@@ -18,7 +18,7 @@ rng = StableRNG(2752)
 
 @testset "Orbits" begin
     include("keplerian.jl")
-    #include("simple.jl")
-    #include("solvers.jl")
-    #include("show.jl")
+    include("simple.jl")
+    include("solvers.jl")
+    include("show.jl")
 end

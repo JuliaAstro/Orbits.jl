@@ -1,6 +1,5 @@
 using BenchmarkTools
 using LinearAlgebra
-using Measurements
 using Orbits:
     flip,
     compute_aor,
@@ -10,84 +9,83 @@ using Orbits:
     _planet_position,
     stringify_units,
     position_angle,
-    separation
+    separation,
+    G_nom # Rsun^3/Msun/d^2
 using Statistics
 
 # Constants
-const G_nom = 2942.2062175044193 # Rsun^3/Msun/d^2
 const MsunRsun_to_gcc = ustrip(u"g/cm^3", 1.0u"Msun/Rsun^3")
 
-# Setup python env
-using Pkg
-ENV["PYTHON"] = ""
-Pkg.build("PyCall")
-using PyCall, Conda
-Conda.add(["batman-package"]; channel="conda-forge")
+# Activate python env
+using CondaPkg
+CondaPkg.add.(["numpy", "batman-package"])
 
-py"""
+using PythonCall
+
+@pyexec """
+global np, _rsky
+
 import numpy as np
 from batman import _rsky
 
-def sky_coords():
-    t = np.linspace(-100, 100, 1_000)
+t = np.linspace(-100, 100, 1_000)
 
-    t0, period, a, e, omega, incl = (
-        x.flatten()
-        for x in np.meshgrid(
-            np.linspace(-5.0, 5.0, 2),
-            np.exp(np.linspace(np.log(5.0), np.log(50.0), 3)),
-            np.linspace(50.0, 100.0, 2),
-            np.linspace(0.0, 0.9, 5),
-            np.linspace(-np.pi, np.pi, 3),
-            np.arccos(np.linspace(0, 1, 5)[:-1]),
-        )
-    )
+t0, period, a, e, omega, incl = (
+   x.flatten()
+   for x in np.meshgrid(
+       np.linspace(-5.0, 5.0, 2),
+       np.exp(np.linspace(np.log(5.0), np.log(50.0), 3)),
+       np.linspace(50.0, 100.0, 2),
+       np.linspace(0.0, 0.9, 5),
+       np.linspace(-np.pi, np.pi, 3),
+       np.arccos(np.linspace(0, 1, 5)[:-1]),
+   )
+)
 
-    r_batman = np.empty((len(t), len(t0)))
+r_batman = np.empty((len(t), len(t0)))
 
-    for i in range(len(t0)):
-        r_batman[:, i] = _rsky._rsky(
-            t, t0[i], period[i], a[i], incl[i], e[i], omega[i], 1, 1
-        )
+for i in range(len(t0)):
+   r_batman[:, i] = _rsky._rsky(
+       t, t0[i], period[i], a[i], incl[i], e[i], omega[i], 1, 1
+   )
 
-    m = r_batman < 100.0
+m = r_batman < 100.0
 
-    return {
-        "m_sum" : m.sum().item(), # Save native Int format
-        "r_batman" : r_batman,
-        "m" : m,
-        "t" : t,
-        "t0" : t0,
-        "period" : period,
-        "a" : a,
-        "e" : e,
-        "omega" : omega,
-        "incl" : incl,
-    }
-
+sky_coords = {
+   "m_sum" : m.sum().item(), # Save native Int format
+   "r_batman" : r_batman,
+   "m" : m,
+   "t" : t,
+   "t0" : t0,
+   "period" : period,
+   "a" : a,
+   "e" : e,
+   "omega" : omega,
+   "incl" : incl,
+}
 
 def small_star(period, t0, aR_star, incl, ecc, omega):
     t = np.linspace(0, period, 500)
     r_batman = _rsky._rsky(
-        t,
-        t0,
-        period,
-        aR_star,
-        incl,
-        ecc,
-        omega,
-        1,
-        1
+       t,
+       t0,
+       period,
+       aR_star,
+       incl,
+       ecc,
+       omega,
+       1,
+       1
     )
 
     m = r_batman < 100.0
 
     return {
-        "t": t,
-        "r_batman": r_batman,
-        "m": m,
+       "t": t,
+       "r_batman": r_batman,
+       "m": m,
     }
-"""
+""" => (sky_coords::Dict{String, Any}, small_star)
 
 function compute_r(orbit, t)
     pos = relative_position(orbit, t)
@@ -101,19 +99,16 @@ as_matrix(pos) = permutedims(reinterpret(reshape, Float64, pos))
 # https://github.com/exoplanet-dev/exoplanet/blob/main/tests/orbits/keplerian_test.py
 
 @testset "KeplerianOrbit: sky coords" begin
-    # Comparison coords from `batman`
-    sky_coords = py"sky_coords"()
-
     # Create comparison orbits from Orbits.jl
     orbits = map(1:length(sky_coords["t0"])) do i
         return KeplerianOrbit(;
-            aR_star=sky_coords["a"][i],
-            P=sky_coords["period"][i],
-            incl=sky_coords["incl"][i],
-            t0=sky_coords["t0"][i],
-            ecc=sky_coords["e"][i],
-            Omega=0.0,
-            omega=sky_coords["omega"][i],
+            aR_star = sky_coords["a"][i],
+            P = sky_coords["period"][i],
+            incl = sky_coords["incl"][i],
+            t0 = sky_coords["t0"][i],
+            ecc = sky_coords["e"][i],
+            Omega = 0.0,
+            omega = sky_coords["omega"][i],
         )
     end
 
@@ -334,14 +329,14 @@ end
     )
 
     # Comparison coords from `batman`
-    small_star = py"small_star"(
+    star = pyconvert(Dict, small_star(
         orbit.period, orbit.t0, orbit.aR_star, orbit.incl, orbit.ecc, orbit.omega
-    )
+    ))
 
     # Compare
-    t = small_star["t"]
-    r_batman = small_star["r_batman"]
-    m = small_star["m"]
+    t = star["t"]
+    r_batman = star["r_batman"]
+    m = star["m"]
     r = compute_r.(orbit, t)
     @test count(m) > 0
     @test allclose(r_batman[m], r[m], atol=2e-5)

@@ -4,7 +4,7 @@
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.github.io/Orbits.jl/dev/)
 
 [![CI](https://github.com/JuliaAstro/Orbits.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/JuliaAstro/Orbits.jl/actions/workflows/ci.yml)
-[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/O/Orbits.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/O/Orbits.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/O/Orbits.html)
 [![codecov](https://codecov.io/gh/juliaastro/Orbits.jl/graph/badge.svg?token=0PXylAA9Ig)](https://codecov.io/gh/juliaastro/Orbits.jl)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
